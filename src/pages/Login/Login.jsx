@@ -1,46 +1,72 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Navbar from '../../Shared/Navbar/Navbar';
-import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { Helmet } from 'react-helmet-async';
 import { AuthContext } from '../../providers/AuthProvider';
 import Sociallogin from '../Components/SocialLogin/Sociallogin';
-import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2'
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Login = () => {
-    const [disabled, setDisabled] = useState(true);
-    const captchaRef = useRef(null);
     const { signin } = useContext(AuthContext);
+    const [showPassword, setShowPassword] = useState(false);
+    const [credentials, setCredentials] = useState({ email: '', password: '' });
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        loadCaptchaEnginge(6); // the number of captcha characters
-    }, []);
-
-    const handlelogin = event => {
-        event.preventDefault();
-        const form = event.target;
-        const email = form.email.value;
-        const password = form.password.value;
-        console.log(email, password);
-        signin(email, password).then(result => {
-            const user = result.user;
-            console.log(user);
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: 'user login successful',
-                showConfirmButton: false,
-                timer: 1500
-              });
-        });
+    const handleRoleChange = (event) => {
+        const role = event.target.value;
+        if (role === 'HR') {
+            setCredentials({ email: 'farah@diba.com', password: 'sdfghJ7^$' });
+        } else if (role === 'Admin') {
+            setCredentials({ email: '', password: '' });
+        } else if (role === 'Client') {
+            setCredentials({ email: '', password: '' });
+        }
     };
 
-    const handleValidateCaptcha = () => {
-        const user_captcha_value = captchaRef.current.value;
-        if (validateCaptcha(user_captcha_value)) {
-            setDisabled(false);
-        } else {
-            setDisabled(true);
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        const { email, password } = credentials;
+
+        try {
+            const result = await signin(email, password);
+            const user = result.user;
+
+            let role = 'HR'; // Determine the role based on your application's logic
+            if (role === 'HR') {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'HR login successful',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                navigate('/dashboard/hrhome');
+            } else if (role === 'Admin') {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Admin login successful',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                navigate('/dashboard/adminhome');
+            } else if (role === 'Client') {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Client login successful',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                navigate('/dashboard/userhome');
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Login failed. Please check your credentials and try again.',
+            });
         }
     };
 
@@ -49,84 +75,86 @@ const Login = () => {
             <Helmet>
                 <title>Login</title>
             </Helmet>
-            <div className='font-sedan place-items-center justify-center'>
-                <Navbar />
-                <div className='my-auto'>
-                    <form onSubmit={handlelogin} className='max-w-sm mx-auto pt-20'>
-                        <p className='text-amber-900 text-3xl  text-center py-2 font-sedan'>Login</p>
-                        <div className='mb-5'>
-                            <label htmlFor='email' className='block mb-2 text-lg font-medium text-gray-900'>
-                                Your email
-                            </label>
-                            <input
-                                type='email'
-                                id='email'
-                                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                placeholder='name@flowbite.com'
-                                required
-                            />
-                        </div>
-                        <div className='mb-5'>
-                            <label htmlFor='password' className='block mb-2 text-lg font-medium text-gray-900'>
-                                Your password
-                            </label>
-                            <input
-                                type='password'
-                                id='password'
-                                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                required
-                            />
-                        </div>
-                        <div className='flex items-start mb-5'>
-                            <div className='flex items-center h-5'>
-                                <input
-                                    id='remember'
-                                    type='checkbox'
-                                    value=''
-                                    className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
+            <div className='flex my-12 font-sedan'>
+                <div className='w-1/2'>
+                    <img className='w-36 justify-center' src="https://i.ibb.co/QMj2Q64/Think-Unlimited-removebg-preview.png" alt="Logo" />
+                    <img src="https://i.ibb.co/fHVPKWv/undraw-Hire-re-gn5j.png" alt="Hire illustration"/>
+                </div>
+                <div className='font-sedan mx-auto w-1/2'>
+                    <div className='text-2xl text-center py-2 w-3/4'>
+                        <p className='text-2xl font-bold'>Welcome to Think Unlimited</p>
+                        <p className='text-xl'>New here? <Link to='/signup' className='text-[#A06CD5]'>Sign Up</Link></p>
+                    </div>
+                    <div className='w-3/4'>
+                        <form onSubmit={handleLogin} className='w-full mx-auto p-10 bg-white rounded-lg shadow-lg'>
+                            <p className='text-3xl text-center py-2'>Login</p>
+                            <div className='mb-5'>
+                                <label htmlFor='role' className='block mb-2 text-lg font-medium text-gray-900'>
+                                    Login as
+                                </label>
+                                <select
+                                    id='role'
+                                    name='role'
+                                    className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
                                     required
+                                    onChange={handleRoleChange}
+                                >
+                                    <option value=''>Select role</option>
+                                    <option value='HR'>HR</option>
+                                    <option value='Admin'>Admin</option>
+                                    <option value='Client'>Client</option>
+                                </select>
+                            </div>
+                            <div className='mb-5'>
+                                <label htmlFor='email' className='block mb-2 text-lg font-medium text-gray-900'>
+                                    Your email
+                                </label>
+                                <input
+                                    type='email'
+                                    id='email'
+                                    name='email'
+                                    className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
+                                    required
+                                    value={credentials.email}
+                                    onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
                                 />
                             </div>
-                            <label htmlFor='remember' className='ms-2 text-sm font-medium text-gray-900'>
-                                Remember me
-                            </label>
-                        </div>
-                        <div className='mb-5'>
-                            <label htmlFor='captcha' className='block mb-2 text-lg font-medium text-gray-900'>
-                                Captcha
-                            </label>
-                            <LoadCanvasTemplate />
-                            <input
-                                onBlur={handleValidateCaptcha}
-                                ref={captchaRef}
-                                name='captcha'
-                                type='text'
-                                placeholder='type the captch given above'
-                                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                required
-                            />
-                            <div className='py-2'>
-                            <button type='button' className='max-h-6 btn ' onClick={handleValidateCaptcha}>
-                                Validate
-                            </button>
+                            <div className='mb-5'>
+                                <label htmlFor='password' className='block mb-2 text-lg font-medium text-gray-900'>
+                                    Your password
+                                </label>
+                                <div className='relative'>
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        id='password'
+                                        name='password'
+                                        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
+                                        required
+                                        value={credentials.password}
+                                        onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                                    />
+                                    <button
+                                        type='button'
+                                        className='absolute inset-y-0 right-0 px-3 py-1 text-sm text-gray-600'
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? 'Hide' : 'Show'}
+                                    </button>
+                                </div>
                             </div>
-                           
-                        </div>
-                        <input
-                            disabled={disabled}
-                            type='submit'
-                            className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-amber-800 dark:hover:bg-amber-900 dark:focus:ring-blue-800'
-                        />
-                      
-                    </form>
-                    <div className='text-lg mx-80 px-28 py-5'><p>New here? <Link to='/signup' className='text-amber-900'>Create an account</Link>
-                       <br/>or
-                       <p>Login with <Sociallogin></Sociallogin></p>
-                       </p>
-
+                            <button
+                                type='submit'
+                                className='text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-[#6247AA]'
+                            >
+                                Login
+                            </button>
+                            <div className='flex flex-col justify-center items-center'>
+                                <p className='text-center'>-------------or-------------</p>
+                                <p><Sociallogin /></p>
+                            </div>
+                        </form>
                     </div>
-                    
-                    
+                    <div className='text-lg text-center py-5'></div>
                 </div>
             </div>
         </>

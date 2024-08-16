@@ -1,60 +1,64 @@
-// This example shows you how to set up React Stripe.js and use Elements.
-// Learn how to accept a payment using the official Stripe docs.
-// https://stripe.com/docs/payments/accept-a-payment#web
-
 import React, { useEffect, useState } from 'react';
-import {loadStripe} from '@stripe/stripe-js';
-import {CardElement, Elements, useElements, useStripe} from '@stripe/react-stripe-js';
-
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAxiosSecure from '../../Components/hooks/useAxiosSecure';
 
-const CheckoutForm = () => {
-  const[error,setError]=useState('');
+const CheckoutForm = ({ email, amount }) => {
+  const [error, setError] = useState('');
+  const [clientSecret, setClientSecret] = useState('');
   const stripe = useStripe();
   const elements = useElements();
-  const axiosSecure=useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
 
-
-useEffect(()=>{
-  axiosSecure.post('/create-payment-intent')
-}),[]
-
-
-
-
-
+  useEffect(() => {
+    if (amount) {
+      axiosSecure.post('/create-payment-intent', { salary: amount })
+        .then(res => setClientSecret(res.data.clientSecret))
+        .catch(error => console.error('Error creating payment intent:', error));
+    }
+  }, [amount, axiosSecure]);
 
   const handleSubmit = async (event) => {
-    // Block native form submission.
     event.preventDefault();
 
-    if (!stripe || !elements) {
-      // Stripe.js has not loaded yet. Make sure to disable
-      // form submission until Stripe.js has loaded.
+    if (!stripe || !elements || !clientSecret) {
       return;
     }
 
-    // Get a reference to a mounted CardElement. Elements knows how
-    // to find your CardElement because there can only ever be one of
-    // each type of element.
     const card = elements.getElement(CardElement);
-
     if (card == null) {
       return;
     }
 
-    // Use your card Element with other Stripe.js APIs
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
-      type: 'card',
-      card,
+    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: card,
+        billing_details: {
+          email: email,
+        },
+      },
     });
 
     if (error) {
       console.log('[error]', error);
-      setError(error.message)
+      setError(error.message);
     } else {
-      console.log('[PaymentMethod]', paymentMethod);
-      setError('')
+      console.log('[PaymentIntent]', paymentIntent);
+      setError('');
+
+      // Save payment information to the database
+      const paymentData = {
+        email: email,
+        amount: amount,
+        paymentIntentId: paymentIntent.id,
+        date: new Date().toISOString(),
+      };
+
+      axiosSecure.post('/payment', paymentData)
+        .then(res => {
+          console.log('Payment saved:', res.data);
+          // You can add additional success actions here
+        })
+        .catch(err => console.error('Error saving payment:', err));
     }
   };
 
@@ -76,7 +80,7 @@ useEffect(()=>{
           },
         }}
       />
-      <button type="submit" disabled={!stripe}>
+      <button type="submit" disabled={!stripe || !clientSecret}>
         Pay
       </button>
       <p className='text-red-600'>{error}</p>
@@ -84,16 +88,4 @@ useEffect(()=>{
   );
 };
 
-// Make sure to call `loadStripe` outside of a component’s render to avoid
-// recreating the `Stripe` object on every render.
-const stripePromise = loadStripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
-
-const App = () => {
-  return (
-    <Elements stripe={stripePromise}>
-      <CheckoutForm />
-    </Elements>
-  );
-};
-
-export default App;
+export default CheckoutForm;

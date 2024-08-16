@@ -1,6 +1,6 @@
 
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useForm } from 'react-hook-form';
 import Navbar from '../../Shared/Navbar/Navbar';
@@ -15,7 +15,7 @@ const Signup = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const { createUser } = useContext(AuthContext);
     const navigate = useNavigate();
-  
+  const[showPassword,setShowPassword]=useState(false);
     const onSubmit = async (data) => {
       console.log(data);
   
@@ -25,8 +25,9 @@ const Signup = () => {
           role: data.role,
           name: data.name,
           email: data.email,
-          photourl: data.photourl,
+          password:data.password,
           designation: data.designation,
+          salary:data.salary,
           bank_account_number: data.bank_account_number
         };
         const res = await axiosPublic.post('/users', userInfo);
@@ -62,7 +63,8 @@ const Signup = () => {
 
                     <label  htmlFor='name' className='block mb-2 text-lg font-medium text-gray-900'>Select your role</label>
 
-      <select defaultValue="value" {...register("Role")} 
+      <select defaultValue="default"
+        {...register("role", { required: true })} 
       className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500'>
       <option disabled value="default">Role</option>
         <option value="Admin">Admin</option>
@@ -82,19 +84,7 @@ const Signup = () => {
                             /> {errors.name && <span className="text-red-600">Name is required</span>}
                         
                     </div>
-                    <div className='mb-5'>
-                        <label htmlFor='email' className='block mb-2 text-lg font-medium text-gray-900'>
-                            Photo URL
-                        </label>
-                        <input
-                         {...register("photourl", { required: true })} 
-                            type='text'
-                            id='photourl'
-                            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                            placeholder='photo url'
-                        />{errors.photourl && <span className="text-red-600">Photo url is required</span>}
-                        
-                    </div>
+                    
                     <div className='mb-5'>
                         <label htmlFor='email' className='block mb-2 text-lg font-medium text-gray-900'>
                             Email
@@ -108,25 +98,37 @@ const Signup = () => {
                             required
                         />{errors.email && <span className="text-red-600">Email is required</span>}
                     </div>
-                    <div className='mb-5'>
-                        <label htmlFor='password' className='block mb-2 text-lg font-medium text-gray-900'>
-                            Password
-                        </label>
-                        <input
-                         type='password'
-                         id='password'
-                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                        {...register("password", { required: true ,
-                            minLength: 6,
-                            maxLength: 20,
-                            pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/
-                        })} placeholder="password"  />
-                        {errors.password?.type === 'required' && <p className="text-red-600">Password is required</p>}
-                        {errors.password?.type === 'minLength' && <p className="text-red-600">Password must be 6 characters</p>}
-                        {errors.password?.type === 'maxLength' && <p className="text-red-600">Password must be less than 20 characters</p>}
-                        {errors.password?.type === 'pattern' && <p className="text-red-600">Password must have one Uppercase one lower case, one number and one special character.</p>}
-                        
-                    </div>
+                    <div className='mb-5 relative'>
+    <label htmlFor='password' className='block mb-2 text-lg font-medium text-gray-900'>
+        Password
+    </label>
+    <div className='relative'>
+        <input
+            type={showPassword ? 'text' : 'password'}
+            id='password'
+            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-12  dark:border-gray-600'
+            {...register("password", {
+                required: true,
+                minLength: 6,
+                maxLength: 20,
+                pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/
+            })}
+            placeholder="password"
+        />
+        <button
+            type="button"
+            className="absolute inset-y-0 right-0 flex items-center px-3 text-sm text-gray-600"
+            onClick={() => setShowPassword(!showPassword)}
+        >
+            {showPassword ? 'Hide' : 'Show'}
+        </button>
+    </div>
+    {errors.password?.type === 'required' && <p className="text-red-600">Password is required</p>}
+    {errors.password?.type === 'minLength' && <p className="text-red-600">Password must be 6 characters</p>}
+    {errors.password?.type === 'maxLength' && <p className="text-red-600">Password must be less than 20 characters</p>}
+    {errors.password?.type === 'pattern' && <p className="text-red-600">Password must have one Uppercase one lower case, one number and one special character.</p>}
+</div>
+
                     <div className='mb-5'>
                         <label htmlFor='designation' className='block mb-2 text-lg font-medium text-gray-900'>
                             Designation
@@ -139,6 +141,19 @@ const Signup = () => {
                             placeholder='designation'
                             required
                         />{errors.designation && <span className="text-red-600">Designation</span>}
+                    </div>
+                    <div className='mb-5'>
+                        <label htmlFor='designation' className='block mb-2 text-lg font-medium text-gray-900'>
+                        Salary
+                        </label>
+                        <input
+                        {...register("salary")}
+                            type='text'
+                            id='designation'
+                            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                            placeholder='designation'
+                            required
+                        />{errors.salary && <span className="text-red-600">Salary</span>}
                     </div>
                     <div className='mb-5'>
                         <label htmlFor='designation' className='block mb-2 text-lg font-medium text-gray-900'>

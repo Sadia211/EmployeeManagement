@@ -13,7 +13,7 @@ import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import HRHome from "../pages/Dashboard/HRHome/HRHome";
 import UserHome from "../pages/Dashboard/UserHome/UserHome";
 import Payment from "../pages/Dashboard/Payment/Payment";
-
+import PieChartEmployee from "../pages/Dashboard/HRHome/PieChart_employee";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -47,6 +47,10 @@ element:<Allusers></Allusers>
         element:<Employees></Employees>
       },
       {
+        path:'piechart',
+        element:<PieChartEmployee></PieChartEmployee>
+      },
+      {
         path:'userhome',
         element:<UserHome></UserHome>
       },
@@ -57,11 +61,6 @@ element:<Allusers></Allusers>
       {
         path:'hrhome',
         element:<HRHome></HRHome>
-      },
-      {
-        path:'payment/:id',
-        element:<Payment></Payment>,
-        loader:({params})=>fetch(`http://localhost:5000/users/${params.id}`)
       }
     ]
   }

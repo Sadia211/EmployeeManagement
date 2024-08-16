@@ -6,13 +6,13 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily:{
-        sedan: "'Sedan', serif"
-       }
-    
+      fontFamily: {
+        sedan: ['Roboto', 'sans-serif']
+      }
     },
   },
-  plugins: [require('daisyui','flowbite/plugin')]
- 
+  plugins: [
+    require('daisyui'),
+    require('flowbite/plugin')
+  ]
 }
-
