@@ -44,14 +44,14 @@ const HRHome = () => {
   };
 
   return (
-    <div className='font-sedan items-center'>
+    <div className='font-sedan items-center ml-60'>
       
-    <div className="chart-container mt-20 px-1 mx-auto">
+    <div className="chart-container mt-20 px-1 mx-auto"id='averageSalaryChart'>
       <BarChart
-        width={700} // Reduced width for the chart
+        width={750} // Reduced width for the chart
         height={300}
         data={stats}
-        margin={{ top: 20, right: 20, left: 20, bottom: 5 }}
+        margin={{ top: 2, right: 20, left: 70, bottom: 5 }}
         barGap={0}// Remove spacing between bars
       >
         <CartesianGrid strokeDasharray="2 3" />

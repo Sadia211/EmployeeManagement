@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import Navbar from '../../Shared/Navbar/Navbar';
 import { Helmet } from 'react-helmet-async';
 import { AuthContext } from '../../providers/AuthProvider';
 import Sociallogin from '../Components/SocialLogin/Sociallogin';
@@ -31,34 +30,21 @@ const Login = () => {
             const result = await signin(email, password);
             const user = result.user;
 
-            let role = 'HR'; // Determine the role based on your application's logic
-            if (role === 'HR') {
+            // Example logic based on user role
+            if (user && email === 'farah@diba.com') {
                 Swal.fire({
-                    position: 'top-end',
                     icon: 'success',
-                    title: 'HR login successful',
-                    showConfirmButton: false,
-                    timer: 1500,
+                    title: 'Login successful!',
+                    text: 'Welcome HR to the dashboard.',
                 });
                 navigate('/dashboard/hrhome');
-            } else if (role === 'Admin') {
+            }  else {
                 Swal.fire({
-                    position: 'top-end',
                     icon: 'success',
-                    title: 'Admin login successful',
-                    showConfirmButton: false,
-                    timer: 1500,
+                    title: 'Login successful!',
+                    text: 'Welcome Client to the dashboard.',
                 });
-                navigate('/dashboard/adminhome');
-            } else if (role === 'Client') {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Client login successful',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                navigate('/dashboard/userhome');
+                navigate(`/dashboard/userhome/${user.email}`);
             }
         } catch (error) {
             console.error('Login failed:', error);
@@ -78,7 +64,7 @@ const Login = () => {
             <div className='flex my-12 font-sedan'>
                 <div className='w-1/2'>
                     <img className='w-36 justify-center' src="https://i.ibb.co/QMj2Q64/Think-Unlimited-removebg-preview.png" alt="Logo" />
-                    <img src="https://i.ibb.co/fHVPKWv/undraw-Hire-re-gn5j.png" alt="Hire illustration"/>
+                    <img src="https://i.ibb.co/fHVPKWv/undraw-Hire-re-gn5j.png" alt="Hire illustration" />
                 </div>
                 <div className='font-sedan mx-auto w-1/2'>
                     <div className='text-2xl text-center py-2 w-3/4'>
@@ -102,7 +88,7 @@ const Login = () => {
                                     <option value=''>Select role</option>
                                     <option value='HR'>HR</option>
                                     <option value='Admin'>Admin</option>
-                                    <option value='Client'>Client</option>
+                                    <option value='Client'>Employee</option>
                                 </select>
                             </div>
                             <div className='mb-5'>

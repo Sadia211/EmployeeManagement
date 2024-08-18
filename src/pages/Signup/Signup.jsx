@@ -8,6 +8,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
 import useAxiosPublic from '../Components/hooks/useAxiosPublic';
 import Swal from 'sweetalert2'
+import useAxiosSecure from '../Components/hooks/useAxiosSecure';
 
 
 const Signup = () => {
@@ -18,9 +19,11 @@ const Signup = () => {
   const[showPassword,setShowPassword]=useState(false);
     const onSubmit = async (data) => {
       console.log(data);
-  
+     
+     
       try {
-        await createUser(data.email, data.password);
+      const userCredentials=  await createUser(data.email, data.password);
+      const user=userCredentials.user;//capture the created user info
         const userInfo = {
           role: data.role,
           name: data.name,
@@ -31,7 +34,7 @@ const Signup = () => {
           bank_account_number: data.bank_account_number
         };
         const res = await axiosPublic.post('/users', userInfo);
-        if (res.data.insertedId) {
+        if (res.data.insertedId && role==='Employee') {
           console.log('user added');
           reset();
           Swal.fire({
@@ -41,7 +44,7 @@ const Signup = () => {
             showConfirmButton: false,
             timer: 1500
           });
-          navigate('/');
+          navigate(`/dashboard/userhome/${user.email}`);
         }
       } catch (error) {
         console.log(error);

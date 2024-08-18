@@ -1,14 +1,14 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Components/hooks/useAxiosSecure';
-import { FaCreditCard,FaMinusCircle } from 'react-icons/fa';
+import { FaCreditCard,FaMinusCircle, FaPen } from 'react-icons/fa';
 import CheckoutForm from '../Payment/CheckoutForm';
 import Swal from 'sweetalert2';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { MdOutlineVerified } from "react-icons/md";
-
+import { Link } from 'react-router-dom';
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_Gateway_pk);
 
 const Employees = () => {
@@ -60,7 +60,7 @@ const Employees = () => {
             });}
 
   return (
-    <div className='mx-10 my-10 font-sedan'>
+    <div className='mx-10 my-10 font-sedan' id='allEmployees'>
       <h2 className='text-center my-5 text-3xl'>All Employees</h2>
       <div className="relative overflow-x-auto shadow-md mx-auto">
         <table className="w-full text-sm text-left rtl:text-right text-black dark:text-black mx-auto">
@@ -74,6 +74,7 @@ const Employees = () => {
               <th scope="col" className="px-2 py-3">Verification Status</th>
               <th scope="col" className="px-2 py-3">Pay</th>
               <th scope="col" className="px-6 py-3">Salary</th>
+              <th scope="col" className="px-6 py-3">Update</th>
               <th scope="col" className="px-6 py-3">Fire</th>
             </tr>
           </thead>
@@ -101,7 +102,7 @@ const Employees = () => {
                   </button>
                   <dialog id={`modal_${index}`} className="modal">
                     <div className="modal-box mx-2 my-2">
-                      <h3 className="text-lg my-2 ">Please Pay
+                      <h3 className="text-lg my-2 ">Pay
                         <br/>
                         Amount: {user.salary} BDT
                       </h3>
@@ -121,7 +122,10 @@ const Employees = () => {
                   </dialog>
                 </td>
                 <td className='pl-2'>{user.salary} BDT</td>
-                <td className='px-6'>
+                <Link to={`/dashboard/update`}>
+                <td className='px-8'><FaPen/></td>
+                </Link>
+                <td className='px-3'>
                 <button onClick={() => handleDeleteUser(user)} className="btn btn-ghost">
                     <FaMinusCircle />
                     </button></td>

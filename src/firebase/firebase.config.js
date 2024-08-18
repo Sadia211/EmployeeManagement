@@ -5,12 +5,12 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBuP9f1pO2WF9lsj2L1H6A2YVmDj85Fo6Y",
-  authDomain: "cozy-corner-49418.firebaseapp.com",
-  projectId: "cozy-corner-49418",
-  storageBucket: "cozy-corner-49418.appspot.com",
-  messagingSenderId: "274025269588",
-  appId: "1:274025269588:web:f813939d49cd2874fd60c1"
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId:import.meta.env.VITE_appId
 };
 
 // Initialize Firebase
