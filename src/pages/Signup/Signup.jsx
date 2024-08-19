@@ -57,11 +57,21 @@ const Signup = () => {
         <Helmet>
             <title>Sign Up</title>
         </Helmet>
-        <div className='font-sedan'>
-            <Navbar />
-            <div className='my-auto'>
-                <form onSubmit={ handleSubmit(onSubmit)}className='max-w-sm mx-auto py-20'>
-                    <p className='text-amber-900 text-3xl  text-center py-2 font-sedan'>Sign Up</p>
+        <div className='font-sedan my-12 flex '>
+            <div className='w-1/2'>
+            <img className='w-40 justify-center mx-20' src="../assets/home/logo.png" alt="Logo" />
+            <img className='mx-10'  src='../assets/home/img2.png'/>
+            </div>
+            <div>
+
+        <div className='text-2xl text-center py-2 w-full mx-20'>
+                        <p className='text-2xl font-bold'>Welcome to Think Unlimited</p>
+                        <p className='text-xl'>Already have an account? <Link to='/login'><span className='text-[#A06CD5]'>Login</span></Link></p>
+                    </div>
+      
+            <div className='w-full mx-20'>
+                <form onSubmit={ handleSubmit(onSubmit)}className='max-w-sm mx-auto py-10'>
+                    <p className='text-3xl text-center py-2 '>Sign Up</p>
                     <div className='mb-5'>
 
                     <label  htmlFor='name' className='block mb-2 text-lg font-medium text-gray-900'>Select your role</label>
@@ -71,7 +81,6 @@ const Signup = () => {
       className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500'>
       <option disabled value="default">Role</option>
         <option value="Admin">Admin</option>
-        <option value="HR">HR</option>
         <option value="Employee">Employee</option>
       </select>
                         <label htmlFor='name' className='block mb-2 text-lg font-medium text-gray-900'>
@@ -174,11 +183,11 @@ const Signup = () => {
                                  
                                      <input
                          type='submit'
-                        className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-amber-800 dark:hover:bg-amber-900 dark:focus:ring-blue-800'
+                        className='text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-[#6247AA]'
                     />
-                    <div><p>Already have an account?<Link to='/login'><span className='text-amber-900'>Login</span></Link></p></div>
+                   
                 </form>
-            </div>
+            </div></div>
         </div>
     </>
 );

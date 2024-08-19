@@ -15,6 +15,7 @@ import UserHome from "../pages/Dashboard/UserHome/UserHome";
 import Payment from "../pages/Dashboard/Payment/Payment";
 import PieChartEmployee from "../pages/Dashboard/HRHome/PieChart_employee";
 import Update from "../pages/Dashboard/Update/Update";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -54,22 +55,21 @@ element:<Allusers></Allusers>
       {
         path:'userhome/:email',
         element:<UserHome></UserHome>,
-        loader:({params})=>fetch(`http://localhost:5000/users/${params.email}`),
+        loader:({params})=>fetch(`http://localhost:5000/payment-info/${params.email}`),
         
       },
+      
+    
       {
         path:'adminhome',
-        element:<AdminHome></AdminHome>
-      },
-      {
-        path:'hrhome',
         element:<HRHome></HRHome>
       },
       {
-        path:'update',
+        path:'update/:email',
         element:<Update></Update>,
-        loader:({params})=>fetch(`http://localhost:5000/dashboard/update/${params.email}`)
+        loader:({params})=>fetch(`http://localhost:5000/users/${params.email}`)
       }
+    
     ]
   }
 ]);

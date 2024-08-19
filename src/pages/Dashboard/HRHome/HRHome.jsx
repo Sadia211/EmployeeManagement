@@ -46,9 +46,9 @@ const HRHome = () => {
   return (
     <div className='font-sedan items-center ml-60'>
       
-    <div className="chart-container mt-20 px-1 mx-auto"id='averageSalaryChart'>
+    <div className="chart-container mt-36 px-1 mx-auto"id='averageSalaryChart'>
       <BarChart
-        width={750} // Reduced width for the chart
+        width={780} // Reduced width for the chart
         height={300}
         data={stats}
         margin={{ top: 2, right: 20, left: 70, bottom: 5 }}
@@ -72,7 +72,7 @@ const HRHome = () => {
         </Bar>
       </BarChart>
 
-      <div className="flex space-x-4 mx-20 mt-10">
+      <div className="flex space-x-4 mx-20 mt-10 " id='totalEmployees'>
   <div className="stats shadow h-48">
     <div className="stat">
       <div className="stat-figure text-secondary">

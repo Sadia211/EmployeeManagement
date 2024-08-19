@@ -86,19 +86,20 @@ const Employees = () => {
                 <td className='px-2'>{user.email}</td>
                 <td className='px-2'>{user.designation}</td>
                 <td>{user.bank_account_number}</td>
-                <td className='px-3'>
+                <td className='px-2'>
                   {user.status === 'verified' ? 
                     <button onClick={() => handleVerify(user)} className="btn btn-ghost">
-                      <MdOutlineVerified />
+                      <MdOutlineVerified className='text-xl bg-green-400 rounded-full '/>
+                      
                     </button> :
                     <button onClick={() => handleVerify(user)} className="btn btn-ghost">
-                      <IoIosCloseCircleOutline />
+                      <IoIosCloseCircleOutline className='text-xl' />
                     </button>
                   }
                 </td>
-                <td>
+                <td className='-px-2'>
                   <button className="btn btn-ghost" onClick={() => document.getElementById(`modal_${index}`).showModal()}>
-                    <FaCreditCard />
+                    <FaCreditCard className='text-lg text-center' />
                   </button>
                   <dialog id={`modal_${index}`} className="modal">
                     <div className="modal-box mx-2 my-2">
@@ -122,9 +123,11 @@ const Employees = () => {
                   </dialog>
                 </td>
                 <td className='pl-2'>{user.salary} BDT</td>
-                <Link to={`/dashboard/update`}>
-                <td className='px-8'><FaPen/></td>
-                </Link>
+               
+                <td className='px-8'>
+                <Link to={`/dashboard/update/${user.email}`}><FaPen/>
+                </Link></td>
+              
                 <td className='px-3'>
                 <button onClick={() => handleDeleteUser(user)} className="btn btn-ghost">
                     <FaMinusCircle />

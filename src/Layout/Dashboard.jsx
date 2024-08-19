@@ -4,14 +4,13 @@ import useAdmin from '../pages/Components/hooks/useAdmin';
 import useHR from '../pages/Components/hooks/useHR';
 import { Outlet } from 'react-router-dom';
 import useAuth from '../pages/Components/hooks/useAuth';
-import { FaChartBar, FaHome, FaTable, FaUser, FaEnvelope } from 'react-icons/fa';
+import { FaChartBar, FaHome, FaTable, FaUser, FaEnvelope, FaCreditCard, FaTasks } from 'react-icons/fa';
 import Navbar from '../Shared/Navbar/Navbar';
 import useAxiosSecure from '../pages/Components/hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
-
+import { Link } from 'react-router-dom';
 const Dashboard = () => {
   const [isAdmin] = useAdmin();
-  const [isHR] = useHR();
   const { user } = useAuth();
   
   const axiosSecure = useAxiosSecure();
@@ -31,31 +30,17 @@ const Dashboard = () => {
         <ul className='menu my-24'>
           {isAdmin ? (
             <>
+            
               <li>
-                <ScrollLink to='adminHome' smooth={true} duration={500}>
-                  <FaHome />
-                  Admin Home
-                </ScrollLink>
+                <h2 className='text-xl font-bold mx-10'>Admin</h2>
+{user.name}
               </li>
               <li>
-                <ScrollLink to='addItems' smooth={true} duration={500}>
-                  <FaUtensils />
-                  Add items
-                </ScrollLink>
-              </li>
-              <li>
-                <ScrollLink to='allUsers' smooth={true} duration={500}>
-                  <FaUser />
-                  All Users
-                </ScrollLink>
-              </li>
-              <div className="divider"></div>
-            </>
-          ) : isHR ? (
-            <>
-              <li>
-                <h2 className='text-xl font-bold items-center'>Admin</h2>
-                {user?.displayName || user?.name}
+               <Link to='hrhome'>
+               <FaHome/>
+               Admin Home</Link>
+                
+                
               </li>
               <li>
                 <ScrollLink to='averageSalaryChart' smooth={true} duration={500}>
@@ -78,40 +63,31 @@ const Dashboard = () => {
             </>
           ) : (
             <>
-              <li>
-                <ScrollLink to='userHome' smooth={true} duration={500}>
+            <div className='mt-10 mx-5'>
+            <li>
+                <ScrollLink to='userhome' smooth={true} duration={500}>
                   <FaHome />
                   User Home
                 </ScrollLink>
               </li>
               <li>
-                <ScrollLink to='history' smooth={true} duration={500}>
-                  
-                  Not History
+                <ScrollLink to='payment' smooth={true} duration={500}>
+                  <FaTasks/>
+              Task
                 </ScrollLink>
               </li>
+              <li>
+                <ScrollLink to='payment' smooth={true} duration={500}>
+                  <FaCreditCard/>
+                Paments
+                </ScrollLink>
+              </li>
+            </div>
+             
             </>
           )}
-          {/* shared nav links */}
-          <div className="divider"></div>
-          <li>
-            <ScrollLink to='home' smooth={true} duration={500}>
-              <FaHome />
-              Home
-            </ScrollLink>
-          </li>
-          <li>
-            <ScrollLink to='menu' smooth={true} duration={500}>
-            
-              Menu
-            </ScrollLink>
-          </li>
-          <li>
-            <ScrollLink to='contact' smooth={true} duration={500}>
-              <FaEnvelope />
-              Contact
-            </ScrollLink>
-          </li>
+          
+        
         </ul>
       </div>
 
