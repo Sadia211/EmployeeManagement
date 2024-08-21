@@ -5,7 +5,7 @@ import useAxiosSecure from '../../Components/hooks/useAxiosSecure';
 import { FaUser, FaUsers } from 'react-icons/fa';
 import Employees from '../Employees/Employees';
 import PieChart_employee from './PieChart_employee';
-
+import { Helmet } from 'react-helmet';
 const HRHome = () => {
   const axiosSecure = useAxiosSecure();
 
@@ -44,6 +44,14 @@ const HRHome = () => {
   };
 
   return (
+    <>
+    <Helmet>
+      <title>
+      AdminHome
+      </title>
+      
+    </Helmet>
+    
     <div className='font-sedan items-center ml-60'>
       
     <div className="chart-container mt-36 px-1 mx-auto"id='averageSalaryChart'>
@@ -96,6 +104,7 @@ const HRHome = () => {
     
     
     </div>
+    </>
 
   );
 };

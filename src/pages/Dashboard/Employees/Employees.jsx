@@ -36,28 +36,76 @@ const Employees = () => {
         }
       });
   };
-  const handleDeleteUser=(user)=>{
-
-    Swal.fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
   
-              if (result.isConfirmed) {
-                  axiosSecure.delete(`/users/${user._id}`)
-                  refetch();
-                Swal.fire({
-                  title: "Deleted!",
-                  text: "Employee has been deleted.",
-                  icon: "success"
-                });
-              }
-            });}
+
+
+
+
+
+
+
+
+
+  const handleDeleteUser = (user) => { // Remove `refetch` from the arguments
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure
+          .delete(`/users/${user._id}`)
+          .then(() => {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Employee has been deleted.",
+              icon: "success"
+            });
+            refetch(); // Directly call refetch here
+          })
+          .catch((error) => {
+            console.error("Error deleting user:", error);
+            Swal.fire({
+              title: "Error!",
+              text: "An error occurred while deleting the employee.",
+              icon: "error"
+            });
+          });
+      }
+    });
+};
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div className='mx-10 my-10 font-sedan' id='allEmployees'>

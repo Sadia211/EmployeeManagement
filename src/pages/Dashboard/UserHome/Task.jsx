@@ -2,20 +2,53 @@ import React, { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import useAxiosPublic from '../../Components/hooks/useAxiosPublic';
+import useAxiosSecure from '../../Components/hooks/useAxiosSecure';
 const Task = () => {
-    
+    const [task, setTask] = useState('');
     const [hoursWorked, setHoursWorked] = useState('');
     const [date, setDate] = useState(null);
-
+    const navigate = useNavigate();
+const axiosSecure=useAxiosSecure();
     const handleTaskSubmit = async (event) => {
         event.preventDefault();
-        // Handle form submission logic here
-        console.log({hoursWorked, date });
+
+        const taskData = {
+            task,
+            hoursWorked,
+            date,
+        };
+
+        try {
+            const res = await axiosSecure.post('/tasks', taskData);
+            if (res.data.insertedId) {
+                console.log('Task added');
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Task submitted successfully.',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                
+            }
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Failed to submit the task.',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
     };
 
     return (
-        <div className="flex flex-col font-sedan justify-center my-36">
+        <div className="flex flex-col font-sedan justify-center my-36" id='task'>
             <h2 className='text-xl text-center'>Submit your task</h2>
             <div className="font-sedan mx-auto w-full">
                 <div className="w-full">
@@ -28,10 +61,10 @@ const Task = () => {
                                 id="task"
                                 name="task"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                required>
-                           
-                               
-                            </input>
+                                required
+                                value={task}
+                                onChange={(e) => setTask(e.target.value)}
+                            />
                         </div>
                         <div className="flex-1">
                             <label htmlFor="hoursWorked" className="block text-lg font-medium text-gray-900">
@@ -47,6 +80,8 @@ const Task = () => {
                                 onChange={(e) => setHoursWorked(e.target.value)}
                             />
                         </div>
+                        
+                       
                         <div className="flex-1">
                             <label htmlFor="date" className="block text-lg font-medium text-gray-900">
                                 Date
@@ -76,7 +111,6 @@ const Task = () => {
                         </div>
                     </form>
                 </div>
-                {/* The table will go here */}
             </div>
         </div>
     );

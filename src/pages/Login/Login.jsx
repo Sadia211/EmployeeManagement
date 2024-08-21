@@ -30,20 +30,20 @@ const Login = () => {
             const user = result.user;
 
             // Example logic based on user role
-            if (user && email === 'tania.islam@think.com'){
+            if (user && email === 'farah@diba.com'){
                 Swal.fire({
                     icon: 'success',
                     title: 'Login successful!',
-                    text: 'Welcome Client to the dashboard.',
+                    
                 });
-                navigate(`/dashboard/userhome/${user.email}`);
+                navigate(`/dashboard/adminhome`);
             } else {
                 Swal.fire({
                     icon: 'success',
                     title: 'Login successful!',
-                    text: 'Welcome Admin to the dashboard.',
+                   
                 });
-                navigate('/dashboard/adminhome');
+                navigate(`/dashboard/userhome/${user.email}`);
             }
         } catch (error) {
             console.error('Login failed:', error);

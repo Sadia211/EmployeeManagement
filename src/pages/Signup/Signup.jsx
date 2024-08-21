@@ -34,7 +34,7 @@ const Signup = () => {
           bank_account_number: data.bank_account_number
         };
         const res = await axiosPublic.post('/users', userInfo);
-        if (res.data.insertedId && role==='Employee') {
+        if (res.data.insertedId) {
           console.log('user added');
           reset();
           Swal.fire({

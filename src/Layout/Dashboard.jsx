@@ -35,8 +35,9 @@ const Dashboard = () => {
                 <h2 className='text-xl font-bold mx-10'>Admin</h2>
 {user.name}
               </li>
+              <div className='text-[16px] space-y-3 my-3'>
               <li>
-               <Link to='hrhome'>
+               <Link to='adminhome'>
                <FaHome/>
                Admin Home</Link>
                 
@@ -59,11 +60,11 @@ const Dashboard = () => {
                   <FaTable />
                   All Employees
                 </ScrollLink>
-              </li>
+              </li></div>
             </>
           ) : (
             <>
-            <div className='mt-10 mx-5'>
+            <div className='mt-10 mx-5 text-[14px]'>
             <li>
                 <ScrollLink to='userhome' smooth={true} duration={500}>
                   <FaHome />
@@ -71,15 +72,15 @@ const Dashboard = () => {
                 </ScrollLink>
               </li>
               <li>
-                <ScrollLink to='payment' smooth={true} duration={500}>
+                <ScrollLink to='task' smooth={true} duration={500}>
                   <FaTasks/>
-              Task
+              Task Submission
                 </ScrollLink>
               </li>
               <li>
                 <ScrollLink to='payment' smooth={true} duration={500}>
                   <FaCreditCard/>
-                Paments
+                Payments
                 </ScrollLink>
               </li>
             </div>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Navigate, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth'
 const axiosSecure=axios.create({
-    baseURL:'http://localhost:5000'
+    baseURL:'https://cozycorner-server.vercel.app/'
 
 })
  

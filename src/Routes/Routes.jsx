@@ -55,7 +55,7 @@ element:<Allusers></Allusers>
       {
         path:'userhome/:email',
         element:<UserHome></UserHome>,
-        loader:({params})=>fetch(`http://localhost:5000/payment-info/${params.email}`),
+        loader:({params})=>fetch(`https://cozycorner-server.vercel.app/payment-info/${params.email}`),
         
       },
       
@@ -67,7 +67,7 @@ element:<Allusers></Allusers>
       {
         path:'update/:email',
         element:<Update></Update>,
-        loader:({params})=>fetch(`http://localhost:5000/users/${params.email}`)
+        loader:({params})=>fetch(`https://cozycorner-server.vercel.app/users/${params.email}`)
       }
     
     ]

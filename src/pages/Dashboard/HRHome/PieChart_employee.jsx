@@ -1,5 +1,5 @@
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Components/hooks/useAxiosSecure';
 
@@ -39,7 +39,6 @@ const PieChartEmployee = () => {
       <PieChart>
         <Pie
           data={stats}
-          data2={stats.designation}
           cx="50%"
           cy="50%"
           labelLine={false}
@@ -53,6 +52,12 @@ const PieChartEmployee = () => {
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
+        <Legend 
+          layout="vertical" 
+          align="right" 
+          verticalAlign="middle" 
+          formatter={(value, entry, index) => `${stats[index]._id}`} 
+        />
       </PieChart>
     </ResponsiveContainer>
   );
